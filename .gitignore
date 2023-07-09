@@ -9,6 +9,8 @@ instance/
 .coverage
 htmlcov/
 
+.DS_Store
+
 dist/
 build/
 *.egg-info/
