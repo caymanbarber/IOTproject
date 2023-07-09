@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Data Visualizer{% endblock %}</h1>
+  {% if g.user %}
+    <p>Change later</p>
+
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+
+
+  <canvas id="myChart" style="width:100%;max-width:700px"></canvas> 
+
+  <script src="{{ url_for('static',filename='node_modules/chart.js/dist/chart.umd.js') }}"></script>
+  <script type="module" src="{{ url_for('static',filename='data.js') }}"></script>
+  
+
+<p>end</p>
+{%endblock%}
