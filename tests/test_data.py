@@ -1,0 +1,51 @@
+import pytest
+from flask import g, session
+from flaskr.db import get_db
+import json
+
+def test_index(client, auth):
+    response = client.get('/')
+    assert response.status_code == 302
+
+    auth.login()
+    response = client.get('/')
+    assert b'Log Out' in response.data
+    
+def test_update(client, auth, app):
+    auth.login()
+    response = client.post('/api', 
+                           headers={'Content-Type': 'application/json'}, 
+                           data=json.dumps({"device_id": 2, 
+                                            "sampled_time": '2018-01-01 00:00:00', 
+                                            "sensor_id": 1, 
+                                            "sensor_value": 0.001}))
+    
+    assert response.json == {'message': 'Data received successfully'}
+    assert response.status_code ==  200
+
+    with app.app_context():
+        db = get_db()
+        dataPoint = db.execute('SELECT * FROM Iotdata WHERE id = 2').fetchone()
+        assert dataPoint['device_id'] == 2
+        assert dataPoint['sampled_time'] == '2018-01-01 00:00:00'
+        assert dataPoint['sensor_id'] == 1
+        assert dataPoint['sensor_value'] == 0.001
+
+    response = client.post('/api', 
+                           headers={'Content-Type': 'application/json'}, 
+                           data=json.dumps({"device_id": 1, 
+                                            "sampled_time": '2018-01-01 00:00:00', 
+                                            "sensor_id": 1, 
+                                            }))
+    assert 'Request is invalid. Keys recieved:' in json.dumps(response.json)
+    assert response.status_code ==  400
+
+    response = client.post('/api', 
+                           headers={'Content-Type': 'application/json'}, 
+                           data=json.dumps({"device_id": 1, 
+                                            "sampled_time": '2018-01-01 00:00:00', 
+                                            "sensor_id": 1, 
+                                            "sensor_value": "0.001"
+                                            }))
+    assert 'Request is invalid. Value is of invalid type.' in json.dumps(response.json)
+    assert response.status_code ==  400
