@@ -10,12 +10,54 @@
 
 {% block content %}
 
+  <canvas id="myChart" width="400" height="200"></canvas> 
 
-  <canvas id="myChart" style="width:100%;max-width:700px"></canvas> 
-
+  <!--<<script src="{{ url_for('static',filename='node_modules/chart.js/dist/chart.umd.js') }}"></script>-->
+  
+  <!--<script src=" https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js "></script>-->
   <script src="{{ url_for('static',filename='node_modules/chart.js/dist/chart.umd.js') }}"></script>
+  <script src="{{ url_for('static',filename='node_modules/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static',filename='node_modules/chartjs-adapter-moment/dist/chartjs-adapter-moment.min.js') }}"></script>
+  <script src="{{ url_for('static',filename='node_modules/jquery/dist/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static',filename='node_modules/vue/dist/vue.global.js') }}"></script>
+
+  <script>
+    const chart_data = {{ data|tojson }};
+  </script>
+
+  <form method="chart-controller">
+    <label for="sampled-date-start">Start Sampled Date</label>
+    <input type="datetime-local" name="sampled-date-start" id="sampled-date-start" required>
+
+    <label for="sampled-date-end">End Sampled Date</label>
+    <input type="datetime-local" name="sampled-date-end" id="sampled-date-end" required>
+
+    <div>
+      <div>
+        <label>Sensors</label>
+        {%for sensor in sensor_list%}
+          <div>
+            <label for="{{sensor}}">{{sensor}}</label>
+            <input type="checkbox" class = "sensors" id="{{sensor}}">
+          </div>
+        {%endfor%}
+      </div>
+      <div>
+        <label>Devices</label>
+        {%for device in device_list%}
+          <div>
+            <label for="{{device}}">{{device}}</label>
+            <input type="checkbox" class = "sensors" id="{{device}}">
+          </div>
+        {%endfor%}
+      </div>  
+    </div>
+    
+    
+
+    <input type="submit" value="fetch">
+  </form>
+
   <script type="module" src="{{ url_for('static',filename='data.js') }}"></script>
   
-
-<p>end</p>
 {%endblock%}

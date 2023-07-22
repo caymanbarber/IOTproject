@@ -1,6 +1,11 @@
 {
   "dependencies": {
+    "@angular/material": "^16.1.5",
     "chart.js": "^4.0.0",
-    "react": "^18.2.0"
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-adapter-moment": "^1.0.1",
+    "jquery": "^3.7.0",
+    "react": "^18.2.0",
+    "vue": "^3.3.4"
   }
 }

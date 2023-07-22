@@ -2,6 +2,7 @@ import pytest
 from flask import g, session
 from flaskr.db import get_db
 import json
+from flaskr import dataPopulator
 
 def test_index(client, auth):
     response = client.get('/')
@@ -10,10 +11,10 @@ def test_index(client, auth):
     auth.login()
     response = client.get('/')
     assert b'Log Out' in response.data
-    
-def test_update(client, auth, app):
+
+def test_post(client, auth, app):
     auth.login()
-    response = client.post('/api', 
+    response = client.post('/api/data', 
                            headers={'Content-Type': 'application/json'}, 
                            data=json.dumps({"device_id": 2, 
                                             "sampled_time": '2018-01-01 00:00:00', 
@@ -31,7 +32,7 @@ def test_update(client, auth, app):
         assert dataPoint['sensor_id'] == 1
         assert dataPoint['sensor_value'] == 0.001
 
-    response = client.post('/api', 
+    response = client.post('/api/data', 
                            headers={'Content-Type': 'application/json'}, 
                            data=json.dumps({"device_id": 1, 
                                             "sampled_time": '2018-01-01 00:00:00', 
@@ -40,7 +41,7 @@ def test_update(client, auth, app):
     assert 'Request is invalid. Keys recieved:' in json.dumps(response.json)
     assert response.status_code ==  400
 
-    response = client.post('/api', 
+    response = client.post('/api/data', 
                            headers={'Content-Type': 'application/json'}, 
                            data=json.dumps({"device_id": 1, 
                                             "sampled_time": '2018-01-01 00:00:00', 
@@ -49,3 +50,19 @@ def test_update(client, auth, app):
                                             }))
     assert 'Request is invalid. Value is of invalid type.' in json.dumps(response.json)
     assert response.status_code ==  400
+"""
+
+def test_api_calls():
+    dataPopulator.start_session()
+    
+"""
+
+def test_get(client, auth, app):
+    auth.login()
+    response = client.get('/api/data?data_range_low=2023-07-10%2021:35:36'
+                          '&data_range_high=2023-07-10%2023:15:36'
+                          '&device_ids=1,2'
+                          '&sensor_ids=1,2')
+                        
+    assert response.status_code ==  200
+    print(response.json)
