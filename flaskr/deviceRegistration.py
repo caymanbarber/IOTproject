@@ -8,60 +8,128 @@ from flaskr.db import get_db
 bp = Blueprint('deviceRegistration', __name__)
 
 
+# put is update?
 
-@login_required
 @bp.route('/devices')
+@login_required
 def deviceRegistration():
     
     
 
     return render_template('deviceRegistration/devReg.html')
 
-@app.route('/api/add_<string:type>', methods=['POST'])
-def add_item(type):
+class Object:
+    def __init__(self):
+        pass
+
+    def __init__(self, id:int):
+        self.id = id
+
+class Sensor(Object):
+    def __init__(self):
+        pass
+
+    def __init__(self, id:int, sensorName:str = None, unit:str = None) -> None:
+        super(Sensor,self).__init__(id)
+        self.sensorName = sensorName
+        self.unit = unit
+
+    def add():
+        pass
+
+    def update():
+        pass
+
+    def delete():
+        #check item is in db first
+        pass
+
+    def get():
+        pass
+
+class Device(Object):
+    def __init__(self):
+        pass
+
+    def __init__(self, id:int, deviceName:str = None, details:str = None, 
+                 city:str = None, coordinates:str = None) -> None:
+        super(Sensor,self).__init__(id)
+        self.deviceName = deviceName
+        self.details = details
+        self.city = city
+        self.coordinates = coordinates
+
+@bp.route('/devices/api/add_<string:type>', methods=['POST'])
+@login_required
+def add_reg_item(type):
+    data = request.json
     match(type):
         case "device":
+            object = Device(id=data['id'], deviceName=data['device_name'], details=data['details'],
+                            city=data['city'], coordinates=data['coordinates'])
             print("get device request")
         case "sensor":
+            object = Sensor(id=data['id'],sensorName=data['sensor_name'],unit=data['unit'])
             print("get sensor request")
         case _:
             print("get request not matching")
             return jsonify({'message': 'Error'})
-    data = request.json
-    new_item = Item(name=data['name'], description=data['description'])
-    db.session.add(new_item)
-    db.session.commit()
+    
+    object.add()
+
     return jsonify({'message': 'Item added successfully'})
 
-@app.route('/api/add_sensor', methods=['POST'])
-def add_item():
-    data = request.json
-    new_item = Item(name=data['name'], description=data['description'])
-    db.session.add(new_item)
-    db.session.commit()
-    return jsonify({'message': 'Item added successfully'})
+@bp.route('/devices/api/delete_<string:type>/<int:item_id>', methods=['DELETE'])
+@login_required
+def delete_reg_item(type, item_id):
+    match(type):
+        case "device":
+            object = Device(id=item_id)
+            print("delete device request")
+        case "sensor":
+            object = Sensor(id=item_id)
+            print("delete sensor request")
+        case _:
+            print("delete request not matching")
+            return jsonify({'message': 'Error'})
+    object.delete()
+    return jsonify({'message': 'Item deleted successfully'})
 
-@app.route('/api/delete_device/<int:item_id>', methods=['DELETE'])
-def delete_item(item_id):
-    item = Item.query.get(item_id)
-    if item:
-        db.session.delete(item)
-        db.session.commit()
-        return jsonify({'message': 'Item deleted successfully'})
-    return jsonify({'message': 'Item not found'})
 
-@app.route('/api/delete_device/<int:item_id>', methods=['DELETE'])
-def delete_item(item_id):
-    item = Item.query.get(item_id)
-    if item:
-        db.session.delete(item)
-        db.session.commit()
-        return jsonify({'message': 'Item deleted successfully'})
-    return jsonify({'message': 'Item not found'})
+@bp.route('/devices/api/get_<string:type>', methods=['GET'])
+@login_required
+def get_reg_items(type):
+    match(type):
+        case "device":
+            object = Device()
+            print("get device request")
+        case "sensor":
+            object = Sensor()
+            print("get sensor request")
+        case _:
+            print("get request not matching")
+            return jsonify({'message': 'Error'})
 
-@app.route('/api/get_sensor', methods=['GET'])
-def get_items():
-    items = Item.query.all()
-    item_list = [{'id': item.id, 'name': item.name, 'description': item.description} for item in items]
+    #TODO
+    item_list = object.get()
     return jsonify({'items': item_list})
+
+@bp.route('/devices/api/update_<string:type>', methods=['PUT'])
+@login_required
+def update_reg_items(type):
+    data = request.json
+    match(type):
+        case "device":
+            object = Device(id=data['id'], deviceName=data['device_name'], details=data['details'],
+                            city=data['city'], coordinates=data['coordinates'])
+            print("put device request")
+        case "sensor":
+            object = Sensor(id=data['id'],sensorName=data['sensor_name'],unit=data['unit'])
+            print("put sensor request")
+        case _:
+            print("put request not matching")
+            return jsonify({'message': 'Error'})
+
+    return jsonify({'message': 'Item updated successfully'})
+    
 
