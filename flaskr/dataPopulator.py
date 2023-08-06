@@ -23,23 +23,23 @@ def start_session():
             print(p)
         date = datetime.strptime("2023-07-10 21:35:36", '%Y-%m-%d %H:%M:%S')
         
-        p = s.post(uri+'/api/dat', 
+        """p = s.post(uri+'/api/data', 
                            headers={'Content-Type': 'application/json'}, 
-                           data=json.dumps({"device_id": 2, 
+                           data=json.dumps({"device_id": 1, 
                                             "sampled_time": print_date(date), 
-                                            "sensor_id": 1, 
+                                            "sensor_id": 3, 
                                             "sensor_value": 0.001}))
-
+        """
         for i in range(100):
             date = generate_date(date,timedelta(minutes=1))
-            data = generate_data(1, print_date(date), 1, sin(i) + 1 + random())
+            data = generate_data(1, print_date(date), 3, sin(i) + 1 + random())
             p = post_data(s, data)
             if debug:
                 print(data)
                 print(p)
 
 def post_data(s, data):
-    p = s.post(uri+'/api/dat', headers={'Content-Type': 'application/json'}, data=json.dumps(data))
+    p = s.post(uri+'/api/data', headers={'Content-Type': 'application/json'}, data=json.dumps(data))
     return p
 
 def generate_data(device_id, sampled_time, sensor_id, sensor_value):

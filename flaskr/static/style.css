@@ -7,6 +7,9 @@ nav { background: lightgray; display: flex; align-items: center; padding: 0 0.5r
 nav h1 { flex: auto; margin: 0; }
 nav h1 a { text-decoration: none; padding: 0.25rem 0.5rem; }
 nav ul  { display: flex; list-style: none; margin: 0; padding: 0; }
+nav ul li.username {font-weight: bold;}
+nav ul li.redirect a {text-decoration: none; color:#333;}
+nav ul li.redirect a:hover {color:#686868;}
 nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content { padding: 0 1rem 1rem; }
 .content > header { border-bottom: 1px solid lightgray; display: flex; align-items: flex-end; }
@@ -21,3 +24,121 @@ nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 .content textarea { min-height: 12em; resize: vertical; }
 input.danger { color: #cc2f2e; }
 input[type=submit] { align-self: start; min-width: 10em; }
+
+.graph-list {
+    border: 1px solid #333; /* Add a border */
+    list-style-type: none; /* Remove default bullet points */
+    padding: 0; /* Remove any default padding */
+    display: flex;
+}
+.graph-lists {
+    margin: 0 auto;
+}
+
+  /* Styles for list items */
+.graph-list li {
+    padding: 10px 15px; /* Add padding to create spacing around buttons */
+    cursor: pointer; /* Change cursor to a pointer on hover */
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+.graph-list li.active {
+    background-color: #4CAF50; /* Active background color */
+    color: #fff; /* Active text color */
+  }
+
+.graph-list li.inactive {
+    background-color: #f1f1f1; /* Inactive background color */
+    color: #333; /* Inactive text color */
+}
+
+.graph-list li:hover {
+    background-color: #ddd; /* Background color on hover */
+  }
+
+#chart-settings {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.button {
+    display: inline-block;
+    padding: 4px 8px;
+    background-color: #007bff;
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: normal;
+    transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;  
+}
+
+.button.clicked {
+    color: #fff;
+    background-color: #686868;
+    border: 1px solid #999;
+}
+
+.button:hover {
+    background-color: #d8d7d7;
+}
+
+.column {
+    float: left;
+    width: 49%;
+    
+}
+ 
+div.column + div{
+    margin-left: 1%;    
+}
+
+  
+  /* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.lists {
+    
+    padding: 5px;
+    border: 1px solid #efefef;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.lists li {
+    background-color: #efefef;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin: 3px;
+    box-sizing: border-box;
+}
+
+.lists li div.id {
+    color: rgb(0, 0, 0);
+    padding: 5px ;
+    align-items: center;
+    width: 30%;
+    border-right: 1px solid #c1c1c1;
+  }
+  
+  .lists li div.name {
+    color: rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+  }
+
+.lists li div.edit {
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}

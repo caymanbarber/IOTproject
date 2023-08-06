@@ -9,12 +9,15 @@ from flaskr.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+code = "Scooby!"
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        reg_code = request.form['regcode']
+
         db = get_db()
         error = None
 
@@ -22,6 +25,10 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+        elif not reg_code:
+            error = 'Registration code is required.'
+        elif not(reg_code == code):
+            error = 'Registration code is incorrect.'
 
         if error is None:
             try:

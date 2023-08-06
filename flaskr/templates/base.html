@@ -1,12 +1,14 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} - Flaskr</title>
+<title>{% block title %}{% endblock %} - IoT Tool</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-  <h1>Flaskr</h1>
-  <ul>
+  <h1>IoT Tool</h1>
+  <ul class="nav-list">
     {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+      <li class = "username"><span>{{ g.user['username'] }}</span>
+      <li class = "redirect"><a href="{{ url_for('data.index') }}">Graph</a</li>
+      <li class = "redirect"><a href="{{ url_for('deviceRegistration.deviceRegistration') }}">Devices</a>
+      <li class = "redirect"><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
     {% else %}
       <li><a href="{{ url_for('auth.register') }}">Register</a>
       <li><a href="{{ url_for('auth.login') }}">Log In</a>

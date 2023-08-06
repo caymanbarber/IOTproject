@@ -35,7 +35,9 @@ def create_app(test_config=None):
     from . import dataVisualizer
     app.register_blueprint(dataVisualizer.bp)
     app.add_url_rule('/', endpoint='index')
-    
+
+    from . import deviceRegistration
+    app.register_blueprint(deviceRegistration.bp)
 
     return app
 
