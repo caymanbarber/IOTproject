@@ -18,3 +18,5 @@ build/
 *.egg-info/
 
 flaskr/static/node_modules
+
+.vscode/
