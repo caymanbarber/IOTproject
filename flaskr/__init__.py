@@ -2,7 +2,15 @@ import os
 
 from flask import Flask
 
-def create_app(test_config=None):
+
+def create_app(test_config=None)->Flask:
+    """Create, init, and return flask application with pages
+    
+    Keyword arguments:
+    test_config -- config file for testing
+    Return: Flask app
+    """
+    
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',  #change after development
@@ -22,20 +30,20 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
+    # Database 
     from . import db
     db.init_app(app)
 
+    #Authorization
     from . import auth
     app.register_blueprint(auth.bp)
 
+    #Graph and Data Visualization
     from . import dataVisualizer
     app.register_blueprint(dataVisualizer.bp)
     app.add_url_rule('/', endpoint='index')
 
+    # Device and Sensor Management and Registration
     from . import deviceRegistration
     app.register_blueprint(deviceRegistration.bp)
 

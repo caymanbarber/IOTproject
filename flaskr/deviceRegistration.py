@@ -13,12 +13,17 @@ bp = Blueprint('deviceRegistration', __name__)
 @bp.route('/devices')
 @login_required
 def deviceRegistration():
-    
-    
+    """Serve the device registration page
+    """
+
+    #TODO: Add default gets to populate page on init
 
     return render_template('deviceRegistration/devReg.html')
 
 class Object:
+    """Parent common object of Sensor and Device
+    """
+    
     def __init__(self):
         pass
 
@@ -35,6 +40,7 @@ class Sensor(Object):
         self.unit = unit
 
     def add():
+        #db.commit()
         pass
 
     def update():
@@ -61,8 +67,15 @@ class Device(Object):
 
 @bp.route('/devices/api/add_<string:type>', methods=['POST'])
 @login_required
-def add_reg_item(type):
-    data = request.json
+def add_reg_item(type:str):
+    """Add specified item to correct list
+    
+    Keyword arguments:
+    type -- type of object to add: device, sensor
+    Return: status message
+    """
+    #TODO: build out request args 
+    data = request.args
     match(type):
         case "device":
             object = Device(id=data['id'], deviceName=data['device_name'], details=data['details'],
@@ -82,6 +95,14 @@ def add_reg_item(type):
 @bp.route('/devices/api/delete_<string:type>/<int:item_id>', methods=['DELETE'])
 @login_required
 def delete_reg_item(type, item_id):
+    """Delete specified item to correct list
+    
+    Keyword arguments:
+    type -- type of object to delete: device, sensor
+    item_id -- id of item to delete
+    Return: status message
+    """
+
     match(type):
         case "device":
             object = Device(id=item_id)
@@ -99,6 +120,13 @@ def delete_reg_item(type, item_id):
 @bp.route('/devices/api/get_<string:type>', methods=['GET'])
 @login_required
 def get_reg_items(type):
+    """Get specified item to correct list
+    
+    Keyword arguments:
+    type -- type of object to add: device, sensor
+    Return: items matching query
+    """
+
     match(type):
         case "device":
             object = Device()
@@ -114,10 +142,17 @@ def get_reg_items(type):
     item_list = object.get()
     return jsonify({'items': item_list})
 
-@bp.route('/devices/api/update_<string:type>', methods=['PUT'])
+@bp.route('/devices/api/update_<string:type>/<int:item_id>', methods=['PUT'])
 @login_required
 def update_reg_items(type):
-    data = request.json
+    """update specified item to correct list
+    
+    Keyword arguments:
+    type -- type of object to add: device, sensor
+    Return: status message
+    """
+    #TODO: build out request args 
+    data = request.args
     match(type):
         case "device":
             object = Device(id=data['id'], deviceName=data['device_name'], details=data['details'],
@@ -132,4 +167,6 @@ def update_reg_items(type):
 
     return jsonify({'message': 'Item updated successfully'})
     
-
+#TODO: Generate unique ID
+def generate_unique_id(type:str)->int:
+    return 0

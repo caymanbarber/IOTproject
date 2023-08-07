@@ -67,7 +67,7 @@ li {
 .button {
     display: inline-block;
     padding: 4px 8px;
-    background-color: #007bff;
+    background-color: #3987da;
     color: white;
     border: 1px solid transparent;
     border-radius: 4px;
@@ -171,4 +171,8 @@ div.column + div{
 float: right;
 margin-left: auto;
 
+}
+
+.lists li.form div.buttons div.delete.button{
+    background: #da4439;
 }

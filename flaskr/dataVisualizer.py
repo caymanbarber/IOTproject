@@ -11,59 +11,62 @@ bp = Blueprint('data', __name__)
 
 @bp.route('/')
 @login_required
-def index():
-    #get data
+def index()->render_template:
+    """Index of site - Data visualizer
     
-    user = g.user['username']
+    Serve page with data for chart
+    Return: render_template
+    """
 
+    # Get user and DB
+    user = g.user['username']
     db = get_db()
+
+    # Retrieve data from DB for initial data visualizer page
     try:
-        #sensor_id
-        keys = get_sensor_list(db, user)
+        # Get list of sensors tied to user
+        sensor_ids = get_sensor_list(db, user)
         dict = {}
-        for key in keys:
+        # Add data for each sensor to a dict
+        for sensor in sensor_ids:
+            # DB query to get data associated with user and sensor
             data = db.execute(
                 ' SELECT username, sensor_id, sampled_time, sensor_value '
                 ' FROM Iotdata i JOIN User u ON i.author_id = u.id '
-                f' WHERE username="{user}" AND sensor_id={key}'
+                f' WHERE username="{user}" AND sensor_id={sensor}'
                 ' ORDER BY sampled_time ASC; '
             ).fetchall()
             
+            # Format data
             data_array = []
             for row in data:
                 data_array.append({"x":row[2],"y":row[3]})
             
-            dict[key] = data_array
-        
-        
-        #flash(json.dumps(dict))
+            dict[sensor] = data_array
+
         return render_template('data/data.html', 
                                data=dict, 
                                device_list=get_device_list(db, user),
                                sensor_list=get_sensor_list(db, user) )
     except Exception as e:
         flash(e)
-
-    return render_template('data/data.html', data="problem")
+        return render_template('data/data.html', data="problem")
 
 
 @bp.route('/api/data', methods=['POST','GET'])
 @login_required
 def restEndpoint():
-
+    """Handle api requests
+    
+    Adds post data to database and retrieves data for visualization 
+    """
+    
     if request.method == 'POST':
         return rest_data_post()
     
     if request.method == 'GET':
-        """
-        request.json
-
-        from request.json get date_range
-        from request.json get sensor_ids
-        from request.json get device_ids
-
-        """
         date_range = {}
+        # Parse data from get request
         date_low = request.args["data_range_low"]
         date_high = request.args["data_range_high"]
         device_ids = request.args.getlist("device_ids")[0].split(',')
@@ -78,6 +81,7 @@ def restEndpoint():
         if not date_range:
             date_range = {}
 
+        # Parse list of device IDs to display
         if device_ids:
             try:
                 if (type(device_ids[0]) == str):
@@ -88,6 +92,7 @@ def restEndpoint():
                 print(e)
                 device_ids = []
 
+        # Parse list of sensor IDs to display
         if sensor_ids:
             try:
                 if (type(sensor_ids[0]) == str):
@@ -100,40 +105,38 @@ def restEndpoint():
 
         return rest_data_get(date_range, sensor_ids, device_ids)
     
-def rest_data_get(date_range, sensor_ids, device_ids):
+def rest_data_get(date_range:dict, sensor_ids:list, device_ids:list)->dict:
+    """Get request
+    
+    Keyword arguments:
+    date-range -- dict of high and low dates to return values between
+    sensor_ids -- list of sensor IDs to return values of
+    device_ids -- list of device IDs to return values of
+    Return: dict with data points, device_id list, and sensor_id list
+    """
+    
+    # Get user and DB
     user = g.user['username']
-
     db = get_db()
+
     try:
-        #sensor_id
-        #keys = [1, 2]
-
-        print(datetime.fromisoformat(date_range["low"]))
-        print(datetime.fromisoformat(date_range["low"]).strftime('%Y-%m-%d %H:%M:%S'))
-
+        # Parse dates for searching of SQLite database
         date_low = str(datetime.fromisoformat(date_range["low"]).strftime('%Y-%m-%d %H:%M:%S'))
         date_high = str(datetime.fromisoformat(date_range["high"]).strftime('%Y-%m-%d %H:%M:%S'))
         data_dict = {}
-        print(sensor_ids)
-        print(type(sensor_ids))
+    
         for key in sensor_ids:
-
+            # Get query and parameters for database query
             (query, params) = construct_dynamic_query(device_ids,key,date_low,date_high)
-            
+            # Query database 
             data = db.execute(query,params).fetchall()
-
-
-            #TODO: Add device_ids and date_range
             
+            # Parse query output
             data_array = []
             for row in data:
                 data_array.append({"x":row[2],"y":row[3]})
             
-            print(str(data_array))
             data_dict[key] = data_array
-
-        print(str(data_dict))
-        print ("done")
         
         return {"data": data_dict, 
                 "device_list":get_device_list(db, user), 
@@ -141,13 +144,17 @@ def rest_data_get(date_range, sensor_ids, device_ids):
     
     except Exception as e:
         print(e)
-        flash(e)
         return {"error":"e"}
 
         
 def rest_data_post():
+    """Post request
+    """
+    
+    # Dict of labels and their intended type
     complete_keys = { "device_id": int, "sampled_time": str, "sensor_id": int, "sensor_value": float}
 
+    # Get keys from data
     try:
         data = request.json
         data_keys = data.keys()
@@ -156,7 +163,8 @@ def rest_data_post():
         raise e
 
     error = None
-    
+
+    # Check if has all required keys
     if set(data_keys).intersection(set(complete_keys.keys())) != complete_keys.keys():
         error = 'Request is invalid. Keys recieved:'
         for key in data_keys:
@@ -171,12 +179,13 @@ def rest_data_post():
                 error += key + ' type:' + type(data[key]).__name__ + ' =/= ' + complete_keys[key].__name__
 
     if error is not None:
-        flash(error)
+        print(error)
         response = {'message': error}
         return jsonify(response), 400
 
     else:
         db = get_db()
+        # Insert data from request into database
         try:
             db.execute(
                 'INSERT INTO Iotdata (author_id, device_id, sampled_time, sensor_id, sensor_value)'
@@ -188,33 +197,60 @@ def rest_data_post():
             flash(error)
             response = {'message': error}
             return jsonify(response), 400
+        
         db.commit()
         response = {'message': 'Data received successfully'}
         return jsonify(response), 200
     
 def get_sensor_list(db, user):
+    """get sensor list
+    
+    Keyword arguments:
+    db -- database object
+    user -- user object
+    Return: list of sensor_ids
+    """
+    
     data = db.execute(
                 ' SELECT DISTINCT username, sensor_id'
                 ' FROM Iotdata i JOIN User u ON i.author_id = u.id '
                 f' WHERE username="{user}"'
                 ' ORDER BY sensor_id DESC; '
             ).fetchall()
-    #data[rows][user sensor_id]
+    
     return list(set([row[1] for row in data]))
 
-def get_device_list(db, user):
+def get_device_list(db, user)->list:
+    """get device list
+    
+    Keyword arguments:
+    db -- database object
+    user -- user object
+    Return: list of device_ids
+    """
+
     data = db.execute(
                 ' SELECT DISTINCT username, device_id'
                 ' FROM Iotdata i JOIN User u ON i.author_id = u.id '
                 f' WHERE username="{user}"'
                 ' ORDER BY device_id DESC; '
             ).fetchall()
-    #data[rows][user sensor_id]
+    
     return list(set([row[1] for row in data]))
 
-def construct_dynamic_query(device_ids=None, sensor_ids=None, date_low=None, date_high=None):
+def construct_dynamic_query(device_ids:list=None, sensor_ids:list=None, date_low:list=None, date_high:list=None)->tuple:
+    """Construct query with arguments
+    
+    Keyword arguments:
+    device_ids -- List of device ids to query
+    sensor_ids -- List of sensor ids to query
+    date_low -- Bouding low date
+    date_high -- Bounding high date
+    Return: Tuple of Query and 
+    """
+    
     # Initialize the SQL query with the basic SELECT statement
-
+    # 1=1 is added so that we can continue with AND
     query = "SELECT username, sensor_id, sampled_time, sensor_value FROM Iotdata i JOIN User u ON i.author_id = u.id WHERE 1=1"
 
     # Add conditions based on user input
@@ -252,6 +288,4 @@ def construct_dynamic_query(device_ids=None, sensor_ids=None, date_low=None, dat
 
     query += " ORDER BY sampled_time ASC;"
 
-    print(query)
-    print(params)
-    return query, params
+    return (query, params)

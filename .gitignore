@@ -11,6 +11,8 @@ htmlcov/
 
 .DS_Store
 
+flaskr/static/sign_up_code
+
 dist/
 build/
 *.egg-info/
