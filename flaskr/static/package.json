@@ -7,5 +7,19 @@
     "chartjs-plugin-zoom": "^2.0.1",
     "jquery": "^3.7.0",
     "react": "^18.2.0"
-  }
+  },
+  "name": "iotproject",
+  "version": "1.0.0",
+  "main": "data.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "../../"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

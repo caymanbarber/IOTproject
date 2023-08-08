@@ -8,7 +8,6 @@ class NPMInstall(build_py):
         self.run_command('source cd flaskr/static && npm install chartjs-adapter-moment')
         self.run_command('source cd flaskr/static && npm install chartjs-plugin-zoom')
         self.run_command('source cd flaskr/static && npm install chart.js')
-        self.run_command('source cd flaskr/static && npm install chart.js')
         build_py.run(self)
 
 setup(
