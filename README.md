@@ -7,7 +7,9 @@
   ``python -m venv .``
   <li>install dependencies</li>
 
-  ``#TODO: install node, download pip dependancies``
+  ``pip install -e . `` <br />
+  ``cd flaskr/static`` <br />
+  ``pnpm install``
   <li>Initializing database</li>
 
   ``flask init_db  --debug run``
