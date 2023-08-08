@@ -12,7 +12,7 @@
   ``source cd flaskr/static && npm install``
   <li>Initializing database</li>
 
-  ``flask init_db  --debug run``
+  ``flask --app flaskr init-db``
   <li>Testing</li>
   
 ``python -m pytest -caputre=yes``
