@@ -9,8 +9,7 @@
   <li>install dependencies</li>
 
   ``pip install -e . `` <br />
-  ``cd flaskr/static`` <br />
-  ``npm install``
+  ``source cd flaskr/static && npm install``
   <li>Initializing database</li>
 
   ``flask init_db  --debug run``
