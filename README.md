@@ -15,7 +15,7 @@
   ``flask --app flaskr init-db``
   <li>Testing</li>
   
-``python -m pytest -caputre=yes``
+``source cd tests/ && python -m pytest -caputre=yes``
   <li>Running</li>
 
 ``flask --app flaskr --debug run``
