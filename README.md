@@ -9,7 +9,7 @@
 
   ``pip install -e . `` <br />
   ``cd flaskr/static`` <br />
-  ``pnpm install``
+  ``npm install``
   <li>Initializing database</li>
 
   ``flask init_db  --debug run``
