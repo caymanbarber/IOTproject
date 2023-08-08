@@ -20,5 +20,6 @@
 
   ``flask --app flaskr --debug run``
   <li>Adding test data</li>
+  
   ``source cd flaskr/ && python dataPopulator.py``
 
