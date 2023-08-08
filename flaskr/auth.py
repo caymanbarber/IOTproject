@@ -13,8 +13,9 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 # If not created, create file "sign_up_code" with signup code 
 # as only text
 try:
-    with open("static/sign_up_code") as f:
+    with open("flaskr/static/sign_up_code") as f:
         code = f.readline()
+        print(code)
 except IOError:
     print("No signup code set: Please create a file called 'sign_up_code' in static/")
     code = "passcode"
@@ -45,9 +46,10 @@ def register()->render_template:
             error = 'Registration code is required.'
         elif not(reg_code == code):
             error = 'Registration code is incorrect.'
-        elif not check_user():
-            #TODO Add test for this
+        elif check_user(username):
             error = 'Username is already taken.'
+
+
         if error is None:
             try:
                 db.execute(
@@ -134,7 +136,7 @@ def check_user(username:str)->bool:
     """
     if (get_db().execute(
         'SELECT * FROM user WHERE username = ?', (username,)
-    ).fetchone() == None):
+    ).fetchone() is None):
         return False
     return True
 
