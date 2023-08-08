@@ -4,7 +4,8 @@
 <ul>
   <li>Setup environment</li>
   
-  ``python -m venv .``
+  ``python -m venv venv`` <br />
+  ``. venv/bin/activatevenv``
   <li>install dependencies</li>
 
   ``pip install -e . `` <br />
