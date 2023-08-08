@@ -5,7 +5,7 @@
   <li>Setup environment</li>
   
   ``python -m venv venv`` <br />
-  ``. venv/bin/activatevenv``
+  ``. venv/bin/activate``
   <li>install dependencies</li>
 
   ``pip install -e . `` <br />
