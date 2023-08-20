@@ -6,3 +6,11 @@ VALUES
 INSERT INTO Iotdata (author_id, device_id, sampled_time, sensor_id, sensor_value)
 VALUES
   (1, 1, '2018-01-01 00:00:00', 1, 1.11);
+
+INSERT INTO Devices (id, device_name, details, city, coordinates)
+VALUES
+  (1, 'Device 1', 'Here are some extra details', 'Costa Mesa', '28.84453,10.18660');
+
+INSERT INTO Sensors (id, sensor_name, unit)
+VALUES
+  (1, 'Sensor 1', 'K');
