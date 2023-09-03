@@ -28,9 +28,6 @@ li {
     list-style-type: none;
 }
 .graph-list {
-    float: left;
-    width: 49%;
-    min-width: 200px; 
     border: 1px solid #333; /* Add a border */
     padding: 0; /* Remove any default padding */
 
@@ -45,7 +42,7 @@ li {
 }
 
 .graph-list li.active {
-    background-color: #4CAF50; /* Active background color */
+    background-color: #3987da; /* Active background color */
     color: #fff; /* Active text color */
   }
 
@@ -104,12 +101,20 @@ div.column + div{
 }
 
 .lists {
-    
     padding: 5px;
     border: 1px solid #efefef;
     border-radius: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.graph-list.lists li{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 3px;
+    padding: 5px 10px;
+    margin: 3px;
 }
 
 .lists li.entry {
@@ -130,12 +135,19 @@ div.column + div{
     width: 30%;
     border-right: 1px solid #c1c1c1;
   }
+
+ 
   
   .lists li div.name {
     color: rgb(0, 0, 0);
     display: flex;
     align-items: center;
     padding: 5px 10px;
+  }
+
+  .graph-list.lists li div{
+    color: rgb(255, 255, 255);
+    flex: 1;
   }
 
 .lists li div.edit {
@@ -148,7 +160,7 @@ div.column + div{
     padding: 5px ;
 }.form
 
-.lists li.for, #id {
+.lists li.form #id {
     width: 30%;
 }
 
