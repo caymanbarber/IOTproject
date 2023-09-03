@@ -24,16 +24,20 @@
 
 
     <div class="row">
-      <div class="graph-list">
+      <div class="column">
         <h3>Sensors</h2>
-        <ul id="sensors" class="graph-list">
+        <ul id="sensors" class="graph-list lists">
           {%for sensor in sensor_list%}
-          <li class="active">{{sensor}}</li>
+          <li class="active">
+            <div class="id">{{sensor}}</div>
+            <div class="name">name</div>
+          </li>
           {%endfor%}
         </ul>
-  
+      </div>
+      <div class="column">
         <h3>Devices</h2>
-        <ul id="devices" class="graph-list">
+        <ul id="devices" class="graph-list lists">
           {%for device in sensor_list%}
           <li class="active">{{device}}</li>
           {%endfor%}
