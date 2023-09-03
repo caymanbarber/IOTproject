@@ -28,13 +28,12 @@ li {
     list-style-type: none;
 }
 .graph-list {
+    float: left;
+    width: 49%;
+    min-width: 200px; 
     border: 1px solid #333; /* Add a border */
-    list-style-type: none; /* Remove default bullet points */
     padding: 0; /* Remove any default padding */
-    display: flex;
-}
-.graph-lists {
-    margin: 0 auto;
+
 }
 
   /* Styles for list items */

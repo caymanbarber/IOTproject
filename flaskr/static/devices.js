@@ -44,11 +44,11 @@ var state = {
             console.error('Fetch error:', error);
         });
 
-        if (objType == 'devices') {
-            state.devices.append(obj);
+        if (objType == 'device') {
+            state.devices.push(object);
 
-        } else if(objType == 'sensors') {
-            state.sensors.append(obj);
+        } else if(objType == 'sensor') {
+            state.sensors.push(object);
         }
 
     },
@@ -122,13 +122,15 @@ $(function() {
         var id = $(this).parent().children(".id").text();
         
         if(state.openItem != null) {
-            console.log(state.openItem.parent().children(".id").text());
-            if(state.openItem.parent().children(".id").text() == id) {
-                state.openItem.parent().next().remove();
+            state.openItem.next();
+            state.openItem.next().find("#id");
+            console.log(state.openItem.next().find("#id").val());
+            if(state.openItem.next().find("#id").val() == id) {
+                state.openItem.next().remove();
                 state.openItem = null;
                 return;
             } else {
-                state.openItem.parent().next().remove();
+                state.openItem.next().remove();
             }
         }
 
@@ -152,9 +154,9 @@ $(function() {
             }
         }
 
-        state.openItem = $(this);
-
-        $(this).parent().after(object.form);
+        state.openItem = $(this).parent();
+        let form = object.form;
+        state.openItem.after(form);
     });
 
     $(".lists").on('click', 'li div.save', function(event) {
@@ -221,14 +223,6 @@ $(function() {
             console.error('Fetch error:', error);
         });
 
-       
-        
-
-
-        
-        // Null if empty
-
-        // Close form, send update to server, update list
     });
 
     $(".lists").on('click', 'li div.delete', function(event) {

@@ -23,21 +23,24 @@
     <input type="datetime-local" step="1" name="sampled-date-to" id="sampled-date-to" value="null">
 
 
-    <div class="graph-lists">
-      <h3>Sensors</h2>
-      <ul id="sensors" class="graph-list">
-        {%for sensor in sensor_list%}
-        <li class="active">{{sensor}}</li>
-        {%endfor%}
-      </ul>
-
-      <h3>Devices</h2>
-      <ul id="devices" class="graph-list">
-        {%for device in sensor_list%}
-        <li class="active">{{device}}</li>
-        {%endfor%}
-      </ul>
+    <div class="row">
+      <div class="graph-list">
+        <h3>Sensors</h2>
+        <ul id="sensors" class="graph-list">
+          {%for sensor in sensor_list%}
+          <li class="active">{{sensor}}</li>
+          {%endfor%}
+        </ul>
+  
+        <h3>Devices</h2>
+        <ul id="devices" class="graph-list">
+          {%for device in sensor_list%}
+          <li class="active">{{device}}</li>
+          {%endfor%}
+        </ul>
+      </div>
     </div>
+    
 
   </div>
   
