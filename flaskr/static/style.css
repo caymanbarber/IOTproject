@@ -89,7 +89,7 @@ li {
 .column {
     float: left;
     width: 49%;
-    
+    min-width: 200px; 
 }
  
 div.column + div{
